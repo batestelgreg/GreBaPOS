@@ -227,3 +227,9 @@ The repository uses Git for version control. See the commit history for project 
 
 
 No license has been added to this repository. All rights are reserved by the project owner unless a license is added later.
+
+
+
+## Development Workflow
+
+New features are developed in separate Git branches and reviewed through Pull Requests before being merged into the main branch.
