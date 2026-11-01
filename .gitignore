@@ -1,0 +1,35 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build output
+**/bin/
+**/obj/
+*.pdb
+
+# Deployment files
+deployment/
+dist/
+*.zip
+
+# Database files and backups
+*.mdf
+*.ldf
+*.bak
+
+# Logs
+*.log
+logs/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local and private configuration
+*.userprefs
+*.secrets.json
+appsettings.local.json
