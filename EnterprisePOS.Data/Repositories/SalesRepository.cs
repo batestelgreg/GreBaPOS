@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
 using EnterprisePOS.Domain.Class;
-
+using EnterprisePOS.Data.Runtime;
 
 namespace EnterprisePOS.Data.Repositories
 {
     public class SalesRepository
     {
+        private readonly DatabaseRepository _databaseRepository;
+
+        public SalesRepository()
+        {
+            _databaseRepository = new DatabaseRepository();
+        }
+
         public int SaveSale(OrderRequest request)
         {
             if (request == null)
@@ -64,7 +69,7 @@ namespace EnterprisePOS.Data.Repositories
             decimal change = request.AmountPaid - total;
 
             using (var scope = new TransactionScope())
-            using (var db = new EnterprisePOSDataDataContext())
+            using (var db = _databaseRepository.CreateContext())
             {
                 foreach (var item in request.Items)
                 {
@@ -150,7 +155,7 @@ namespace EnterprisePOS.Data.Repositories
             if (userId <= 0)
                 throw new ArgumentException("Invalid user ID.");
 
-            using (var db = new EnterprisePOSDataDataContext())
+            using (var db = _databaseRepository.CreateContext())
             {
                 var result = db.usp_Order_Void(
                     orderId,
@@ -166,5 +171,4 @@ namespace EnterprisePOS.Data.Repositories
             }
         }
     }
-
 }

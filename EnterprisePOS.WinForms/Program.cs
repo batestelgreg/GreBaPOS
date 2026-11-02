@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EnterprisePOS.Data.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,15 +9,29 @@ namespace EnterprisePOS.WinForms
 {
     internal static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginForm());
+
+            try
+            {
+                string connectionString =
+                    DatabaseConnectionSettings.GetConnectionString();
+
+                RuntimeConnectionStringProvider.Set(connectionString);
+
+                Application.Run(new LoginForm());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Unable to initialize the database connection.\n\n" + ex.Message,
+                    "GreBaPOS - Startup Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

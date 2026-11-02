@@ -30,6 +30,9 @@ namespace EnterprisePOS.WinForms
         private readonly SalesService _salesService =
     new SalesService();
 
+        private readonly DatabaseRepository _databaseRepository =
+    new DatabaseRepository();
+
         private decimal _subtotal;
         private decimal _discountAmount;
         private decimal _taxAmount;
@@ -277,7 +280,7 @@ namespace EnterprisePOS.WinForms
         {
             try
             {
-                using (var db = new EnterprisePOSDataDataContext())
+                using (var db = _databaseRepository.CreateContext())
                 {
                     var products = db.Products
                         .Where(p => p.IsActive)
@@ -374,7 +377,7 @@ namespace EnterprisePOS.WinForms
         {
             try
             {
-                using (var db = new EnterprisePOSDataDataContext())
+                using (var db = _databaseRepository.CreateContext())
                 {
                     var product = db.Products.FirstOrDefault(p =>
                         p.IsActive &&
@@ -495,7 +498,7 @@ namespace EnterprisePOS.WinForms
 
             try
             {
-                using (var db = new EnterprisePOSDataDataContext())
+                using (var db = _databaseRepository.CreateContext())
                 {
                     var product = db.Products.FirstOrDefault(
                         p => p.ProductId == item.ProductId && p.IsActive);
@@ -607,7 +610,7 @@ namespace EnterprisePOS.WinForms
 
             try
             {
-                using (var db = new EnterprisePOSDataDataContext())
+                using (var db = _databaseRepository.CreateContext())
                 {
                     var product = db.Products.FirstOrDefault(
                         p => p.ProductId == item.ProductId && p.IsActive);
@@ -773,7 +776,7 @@ namespace EnterprisePOS.WinForms
                     string savedOrderNumber;
                     DateTime savedOrderDate;
 
-                    using (var db = new EnterprisePOSDataDataContext())
+                    using (var db = _databaseRepository.CreateContext())
                     {
                         var savedOrder = db.Orders.FirstOrDefault(
                             o => o.OrderId == orderId);

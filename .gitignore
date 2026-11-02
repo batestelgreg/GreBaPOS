@@ -33,3 +33,9 @@ desktop.ini
 *.userprefs
 *.secrets.json
 appsettings.local.json
+
+# Deployment files & Installers
+deployment/
+dist/
+*.zip
+SQLEXPR_x64_ENU.exe
