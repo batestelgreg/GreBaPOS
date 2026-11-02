@@ -112,23 +112,17 @@ The solution follows a layered architecture with separate projects for data acce
 
 ```text
 GreBaPOS/
-│
 ├── Database/
 │   ├── Batestel_Schema.sql
 │   └── Batestel_Seed.sql
-│
 ├── EnterprisePOS.Data/
-│
 ├── EnterprisePOS.Domain/
-│
 ├── EnterprisePOS.Services/
-│
 ├── EnterprisePOS.WinForms/
-│
-├── GreBaPOS.slnx
-├── GreBaPOS.iss
-├── InstallDatabase.ps1
 ├── .gitignore
+├── GreBaPOS.slnx
+├── GreBaPOS_Setup.iss
+├── InstallDatabase.ps1
 └── README.md
 ```
 
