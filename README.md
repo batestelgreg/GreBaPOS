@@ -1,6 +1,28 @@
 # GreBaPOS
 
-**GreBaPOS** is a Point of Sale (POS) and Inventory Management desktop application built using C# Windows Forms, .NET Framework 4.8, and Microsoft SQL Server[cite: 9].
+**GreBaPOS** is a Point of Sale (POS) and Inventory Management desktop application built using C# Windows Forms, .NET Framework 4.8, and Microsoft SQL Server.
+
+## 🚀 Quick Installation (Recommended for Users)
+
+If you want to install and run GreBaPOS without setting up the source code, you can download the ready-to-use installer directly from our releases:
+
+👉 **[Download GreBaPOS Installer (Latest Release)](https://github.com/batestelgreg/GreBaPOS/releases/latest)**
+
+### Installation Steps:
+1. Download `GreBaPOS_Setup.exe` from the [Releases page](https://github.com/batestelgreg/GreBaPOS/releases/latest).
+2. Right-click the installer and select **Run as Administrator**.
+3. The automated setup will handle application files, detect/configure SQL Server Express (`.\SQLEXPRESS`), and initialize the database schema and seed data.
+4. Launch **GreBaPOS** from your desktop shortcut!
+
+
+## 🔑 Default User Accounts
+
+| Role | Username | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin` | `Admin@123` |
+| **Manager** | `manager` | `Manager@123` |
+| **Cashier** | `cashier` | `Cashier@123` |
+
 
 ## Features
 
@@ -14,9 +36,9 @@
 
 ## Technology Stack
 
-- C# / Windows Forms (.NET Framework 4.8)[cite: 9]
-- Microsoft SQL Server & SQL Server Express[cite: 9]
-- LINQ-to-SQL[cite: 9]
+- C# / Windows Forms (.NET Framework 4.8)
+- Microsoft SQL Server & SQL Server Express
+- LINQ-to-SQL[
 - Inno Setup (for desktop installation packaging)
 - PowerShell (for automated database schema deployment and verification)
 
@@ -114,14 +136,6 @@ GreBaPOS can be packaged into a Windows installer using Inno Setup:
 4. Compile the script using Inno Setup to generate `GreBaPOS_Setup.exe`.
 
 
-
-## Default Accounts
-
-The initial database seed creates the following default active accounts (change passwords before production use):
-
-* **Admin**: `Username: admin`, `Password: Admin@123`
-* **Manager**: `Username: manager` , `Password: Manager@123`
-* **Cashier**: `Username: cashier` , `Password: cashier@123`
 
 ## Hardware Requirements
 
