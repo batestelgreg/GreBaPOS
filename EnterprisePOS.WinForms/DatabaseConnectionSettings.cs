@@ -13,6 +13,10 @@ namespace EnterprisePOS.WinForms
         private const string ConnectionModeKey = "DatabaseConnectionMode";
         private const string ServerNameKey = "DatabaseServerName";
 
+        // Embedded SQL Server Express LocalDB instance. It starts on demand when
+        // the application connects, so no manual database engine setup is needed.
+        private const string StandaloneLocalDbSource = @"(localdb)\MSSQLLocalDB";
+
         public static string ConnectionMode
         {
             get
@@ -42,20 +46,38 @@ namespace EnterprisePOS.WinForms
                     "Invalid database connection mode. Use Standalone or LAN.");
             }
 
-            if (string.IsNullOrWhiteSpace(ServerName))
-            {
-                throw new InvalidOperationException(
-                    "Database server name is required.");
-            }
-
             SqlConnectionStringBuilder builder =
                 new SqlConnectionStringBuilder();
 
-            builder.DataSource = ServerName.Trim();
+            if (mode.Equals("Standalone", StringComparison.OrdinalIgnoreCase))
+            {
+                // Embedded LocalDB instance - starts automatically on demand.
+                builder.DataSource = StandaloneLocalDbSource;
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(ServerName))
+                {
+                    throw new InvalidOperationException(
+                        "Database server name is required in LAN mode.");
+                }
+
+                builder.DataSource = ServerName.Trim();
+            }
+
             builder.InitialCatalog = "Batestel";
             builder.IntegratedSecurity = true;
-            builder.Encrypt = true;
             builder.TrustServerCertificate = true;
+
+            if (mode.Equals("Standalone", StringComparison.OrdinalIgnoreCase))
+            {
+                // Some LocalDB instance versions do not support encryption.
+                builder.Encrypt = false;
+            }
+            else
+            {
+                builder.Encrypt = true;
+            }
 
             return builder.ConnectionString;
         }

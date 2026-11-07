@@ -10,10 +10,17 @@
 **/obj/
 *.pdb
 
-# Deployment files
+# NuGet packages (ma-restore ra sa NuGet)
+packages/
+
+# Installers and deployment output
+Output/
 deployment/
 dist/
+prerequisites/
+*.msi
 *.zip
+SQLEXPR_x64_ENU.exe
 
 # Database files and backups
 *.mdf
@@ -33,9 +40,3 @@ desktop.ini
 *.userprefs
 *.secrets.json
 appsettings.local.json
-
-# Deployment files & Installers
-deployment/
-dist/
-*.zip
-SQLEXPR_x64_ENU.exe

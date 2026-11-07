@@ -1,6 +1,6 @@
 # GreBaPOS
 
-**GreBaPOS** is a Point of Sale (POS) and Inventory Management desktop application built using C# Windows Forms, .NET Framework 4.8, and Microsoft SQL Server.
+**GreBaPOS** is a Point of Sale (POS) and Inventory Management desktop application built using C# Windows Forms, .NET Framework 4.8, and a Microsoft SQL Server Express **LocalDB embedded database**.
 
 ## 🚀 Quick Installation
 
@@ -15,13 +15,9 @@ Download the latest ready-to-use installer from our GitHub Releases:
 Before installing GreBaPOS, ensure your computer meets the following requirements:
 
 1. **Operating System:** Windows 10 / 11 (64-bit)
-2. **.NET Framework:** 4.8 Runtime
-3. **Database Engine:** Microsoft SQL Server Express with the `.\SQLEXPRESS` instance configured and Windows Authentication enabled.
+2. **.NET Framework:** 4.8 Runtime (the installer checks this automatically)
 
-**Note:**
-- Download SQL Server Express from the [official Microsoft SQL Server Downloads page](https://www.microsoft.com/sql-server/sql-server-downloads).
-- SQL Server Management Studio (SSMS) is optional and is not required for regular application users.
-- Only the SQL Server Express database engine is required to run the application.
+Nothing else is required. The embedded database engine (SQL Server Express LocalDB) and the `Batestel` database are installed and configured automatically by the installer - no manual database setup.
 
 ### 🛠️ Installation Guide
 
@@ -38,15 +34,16 @@ Follow these steps:
    During installation, the setup process automatically:
 
    - Installs the application files on your computer.
-   - Detects the local SQL Server Express instance (`.\SQLEXPRESS`).
-   - Executes the `InstallDatabase.ps1` PowerShell script.
-   - Creates the `Batestel` database.
+   - Installs SQL Server Express LocalDB (embedded engine, no Windows service).
+   - Runs the built-in `/provision` mode, which creates the `Batestel` database.
    - Deploys the database schema, tables, and stored procedures.
    - Seeds the default system accounts.
-   - Performs the necessary database deployment and verification steps.
+   - Verifies the database deployment.
 
 4. Once installation is complete, launch **GreBaPOS** using the desktop shortcut.
 5. Log in using one of the default user accounts provided below.
+
+**How it works under the hood:** LocalDB auto-starts the database engine on demand whenever the application connects, so there is no service to manage and no restart is required. On every application launch, the app re-checks the database and automatically provisions it if it is missing.
 
 ---
 
@@ -98,9 +95,10 @@ GreBaPOS is developed using the following technologies and tools:
 | C# | Primary programming language |
 | Windows Forms | Desktop application user interface |
 | .NET Framework 4.8 | Application framework |
-| Microsoft SQL Server Express | Database management |
+| Microsoft SQL Server Express LocalDB | Embedded database management (auto-starts on demand) |
 | LINQ-to-SQL | Database access and data operations |
-| PowerShell | Automated database deployment, seeding, and verification |
+| Built-in `/provision` mode (C#) | Automated database installation and seeding |
+| PowerShell | Optional database deployment script (`InstallDatabase.ps1` for `.\SQLEXPRESS` setups) |
 | Inno Setup | Windows application installer packaging |
 | Git | Source control and version management |
 
@@ -119,6 +117,8 @@ GreBaPOS/
 ├── EnterprisePOS.Domain/
 ├── EnterprisePOS.Services/
 ├── EnterprisePOS.WinForms/
+├── prerequisites/
+│   └── SqlLocalDB.msi
 ├── .gitignore
 ├── GreBaPOS.slnx
 ├── GreBaPOS_Setup.iss
@@ -133,8 +133,10 @@ GreBaPOS/
 - **EnterprisePOS.Services** – Handles business logic and application services.
 - **EnterprisePOS.WinForms** – Contains the desktop user interface and application forms.
 - **Database** – Contains the SQL scripts for database schema creation and initial data seeding.
-- **InstallDatabase.ps1** – Automates database installation, configuration, seeding, and verification.
-- **GreBaPOS.iss** – Defines the Inno Setup configuration for creating the Windows installer.
+- **EnterprisePOS.WinForms `/provision` mode** – Built-in automated database installation, seeding, and verification used by the installer and application startup.
+- **prerequisites\SqlLocalDB.msi** – Embedded LocalDB engine installer bundled by `GreBaPOS_Setup.iss`.
+- **InstallDatabase.ps1** – Optional PowerShell database installer for shared `.\SQLEXPRESS` (LAN) setups.
+- **GreBaPOS_Setup.iss** – Defines the Inno Setup configuration for creating the Windows installer.
 
 ---
 
@@ -146,7 +148,7 @@ To build and run GreBaPOS from source, install the following:
 
 - Visual Studio with the **.NET desktop development** workload.
 - .NET Framework 4.8 Developer Pack.
-- Microsoft SQL Server Express with the `.\SQLEXPRESS` instance.
+- SQL Server Express LocalDB (the automatic instance `(localdb)\MSSQLLocalDB` is installed with Visual Studio, or obtain it with the SQL Server Express Installer).
 - SQL Server Management Studio (SSMS) – Optional, for database inspection and management.
 - Inno Setup – Required when creating the desktop installer.
 
@@ -156,10 +158,11 @@ To build and run GreBaPOS from source, install the following:
 2. Open `GreBaPOS.slnx` using a compatible version of Visual Studio.
 3. Allow Visual Studio to load all solution projects.
 4. Set `EnterprisePOS.WinForms` as the startup project.
-5. Select the **Release** configuration.
-6. Build the solution.
-7. Ensure that the SQL Server Express instance (`.\SQLEXPRESS`) is running.
-8. Run the application.
+5. Run the application.
+
+No database setup is needed - the app connects to the embedded `(localdb)\MSSQLLocalDB` instance, auto-starts it, and automatically provisions the `Batestel` database if it is missing.
+
+> Alternative shared-server mode: set `DatabaseConnectionMode=LAN` in `App.config` with a `DatabaseServerName` such as `192.168.1.100\SQLEXPRESS`, then use `InstallDatabase.ps1` to set up that shared instance.
 
 ### Creating the Desktop Installer
 
@@ -170,9 +173,11 @@ Follow these steps:
 1. Open the solution in Visual Studio.
 2. Select the **Release** configuration.
 3. Build the entire solution.
-4. Open `GreBaPOS.iss` using Inno Setup Compiler.
-5. Compile the installer script.
-6. The generated `GreBaPOS_Setup.exe` will be available in the configured output directory.
+4. Make sure `prerequisites\SqlLocalDB.msi` is in place (see the installation section above).
+5. Open `GreBaPOS_Setup.iss` using Inno Setup Compiler and compile it.
+6. The generated `GreBaPOS_Setup.exe` will be available in the `Output` directory.
+
+The single installer ships everything: app + embedded LocalDB engine + database setup scripts, and configures the database automatically during installation.
 
 ---
 
